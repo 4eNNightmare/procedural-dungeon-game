@@ -19,14 +19,14 @@ namespace MapSystem{
 		public Vertex[,] vertexList;
 		public Vector2 center;
 
-		public Vertices(Vector2 size){
+		public Vertices(Vector2 size, float scale){
 			this.vertexList = new Vertex[(int)size.x+1, (int)size.y+1];
 			this.center = new Vector2 (size.x / 2, size.y / 2);
 			for(int y = 0; y <= size.y; y++)
 			{
 				for(int x = 0; x <= size.x; x++)
 				{
-					vertexList[x, y] = new Vertex (new Vector2 (x, y));
+					vertexList[x, y] = new Vertex (new Vector2 (x, y) * scale);
 				}
 			}
 		}

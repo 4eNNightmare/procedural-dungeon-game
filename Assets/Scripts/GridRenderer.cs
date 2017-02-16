@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GridRenderer : MonoBehaviour {
 	public MapSystem.Grid grid;
+	public float gridScale;
 	public Vector2 gridSize;
 
 	public float vertexSize = 1;
@@ -22,10 +23,10 @@ public class GridRenderer : MonoBehaviour {
 
 	void Start()
 	{
-		this.grid = new MapSystem.Grid (this.gridSize);
-		DrawVertices ();
-		DrawCells ();
-		DrawEdges ();
+		this.grid = new MapSystem.Grid (this.gridSize, this.gridScale);
+		this.DrawVertices ();
+		this.DrawCells ();
+		this.DrawEdges ();
 	}
 
 	private void DrawVertices()
@@ -53,7 +54,7 @@ public class GridRenderer : MonoBehaviour {
 			cellRenderer.material = this.cellMaterial;
 			cellRenderer.color = this.cellColor;
 			cellRenderer.size = this.cellSize;
-			cellRenderer.sprite = this.cellSprite;
+			cellRenderer.setSprite(this.cellSprite, 1/this.gridScale);
 			cellRenderer.gameObject.transform.parent = cellGroup.transform;
 		}
 	}

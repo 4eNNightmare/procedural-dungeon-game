@@ -68,6 +68,12 @@ namespace MapSystem.Renderer
 				this.renderer.material.color = _color = value;
 			}
 		}
+
+		public void setSprite(Sprite sprite, float pixelsPerUnit)
+		{
+			Texture2D t = sprite.texture;
+			this.sprite = Sprite.Create (t, new Rect (0.0f, 0.0f, t.width, t.height), new Vector2 (0.5f, 0.5f), pixelsPerUnit);
+		}
 	}
 
 }
