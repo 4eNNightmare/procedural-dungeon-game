@@ -2,7 +2,7 @@
 using System.Collections;
 
 namespace MapSystem{
-	[System.Serializable]
+	
 	public class Vertex
 	{
 		public Vector2 position;
@@ -13,8 +13,7 @@ namespace MapSystem{
 			this.position = position;   
 		}
 	}
-
-	[System.Serializable]
+		
 	public class Vertices
 	{
 		public Vertex[,] vertexList;

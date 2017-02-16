@@ -3,45 +3,54 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace MapSystem{
-	[System.Serializable]
+
 	public class Cell
 	{
 		public Dictionary<string, Edge> edges;
 		public Vertex[,] vertices;
-		public Vector2 center;
+
+		public float width
+		{
+			get{ return this.edges["right"].start.position.x - this.edges["left"].end.position.x; }
+		}
+
+		public float height
+		{
+			get{ return this.edges["top"].start.position.y - this.edges["bottom"].end.position.y; }
+		}
+
+		public Vector2 center
+		{
+			get
+			{
+				return vertices[0,0].position + new Vector2(width, height)/2;
+			}
+		}
 
 
-		public Cell(Vertex[,] vertices){
-			this.vertices = vertices;
-			this.center = new Vector2 (vertices[1,0].position.x/2, vertices[0,1].position.y/2);
-			this.edges = new Dictionary<string, Edge>();
-
-			this.edges["bottom"] = new Edge(this.vertices[1,0], this.vertices[0,0]);
-			this.edges["left"] = new Edge(this.vertices[0,0], this.vertices[0,1]);
-			this.edges["top"] = new Edge(this.vertices[0,1], this.vertices[1,1]);
-			this.edges["right"] = new Edge(this.vertices[1,1], this.vertices[1,0]);
+		public Cell(Dictionary<string, Edge> edges){
+			this.edges = edges;
+			this.vertices = new Vertex[2,2]{ {edges["bottom"].start, edges["bottom"].end}, {edges["top"].start, edges["top"].end} };
 		}
 	}
-
-	[System.Serializable]
+		
 	public class Cells{
 		public Cell[,] cellList;
-		public Vector2 center;
 
-		public Cells(Vertices vertices)
+		public Cells(Edges edges)
 		{
-			this.center = vertices.center;
-			this.cellList = new Cell[vertices.vertexList.GetLength (0) - 1, vertices.vertexList.GetLength (1) - 1];
-			for(int y = 0; y < cellList.GetLength(1); y++)
+			this.cellList = new Cell[edges.edgeList["horizontal"].GetLength (0), edges.edgeList["vertical"].GetLength (1)];
+			for(int y = 0; y < edges.edgeList["vertical"].GetLength (1); y++)
 			{
-				for(int x = 0; x < cellList.GetLength(0); x++)
+				for(int x = 0; x < edges.edgeList["horizontal"].GetLength (0); x++)
 				{
-					Vertex[,] v = new Vertex[2, 2];
-					v[0, 0] = vertices.vertexList[x    , y    ];
-					v[0, 1] = vertices.vertexList[x    , y + 1];
-					v[1, 0] = vertices.vertexList[x + 1, y    ];
-					v[1, 1] = vertices.vertexList[x + 1, y + 1];
-					cellList[x, y] = new Cell (v);
+					Dictionary<string, Edge> e = new Dictionary<string, Edge> {
+						{ "bottom",	new Edge (edges.edgeList ["horizontal"] [x, y].start, edges.edgeList ["horizontal"] [x, y].end) },
+						{ "left",	new Edge (edges.edgeList ["vertical"]   [x, y].start, edges.edgeList ["vertical"]   [x, y].end) },
+						{ "top",	new Edge (edges.edgeList ["horizontal"] [x, y + 1].start, edges.edgeList ["horizontal"] [x, y + 1].end) },
+						{ "right",	new Edge (edges.edgeList ["vertical"]   [x + 1, y].start, edges.edgeList ["vertical"]   [x + 1, y].end) }
+					};
+					cellList[x, y] = new Cell (e);
 				}
 			}
 		}
