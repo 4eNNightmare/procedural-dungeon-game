@@ -4,6 +4,8 @@ using System.Collections;
 namespace MapSystem.Renderer{
 	public class Edge
 	{
+		public MapSystem.Edge edge;
+
 		public GameObject gameObject;
 
 		public LineRenderer renderer
@@ -13,6 +15,8 @@ namespace MapSystem.Renderer{
 				return this.gameObject.GetComponent<LineRenderer> ();
 			}
 		}
+
+		public float scale;
 
 		private float _width
 		{
@@ -30,7 +34,7 @@ namespace MapSystem.Renderer{
 			}
 			set
 			{
-				renderer.widthMultiplier = value;
+				renderer.widthMultiplier = value * scale;
 			}
 		}
 
@@ -58,8 +62,11 @@ namespace MapSystem.Renderer{
 			}
 		}
 
-		public Edge(MapSystem.Edge edge)
+		public Edge(MapSystem.Edge edge, float scale)
 		{
+			this.edge = edge;
+			this.edge.renderer = this;
+			this.scale = scale;
 			this.gameObject = new GameObject(string.Format("Edge {0}", edge.start.position), typeof(LineRenderer));
 			this.renderer.SetPosition (0, edge.start.position);
 			this.renderer.SetPosition (1, edge.end.position);

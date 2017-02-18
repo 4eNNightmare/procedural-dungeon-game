@@ -2,24 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridRenderer : MonoBehaviour {
+public class MapRenderer : MonoBehaviour {
+	[HideInInspector]
 	public MapSystem.Grid grid;
 	public float gridScale;
 	public Vector2 gridSize;
-
+	[Header("Vertex")]
 	public float vertexSize = 1;
 	public Color vertexColor = Color.white;
 	public Sprite vertexSprite;
 	public Material vertexMaterial;
-
+	[Header("Edge")]
+	public float edgeWidth = 0.05f;
+	public Color edgeColor = Color.black;
+	public Material edgeMaterial;
+	[Header("Cell")]
 	public float cellSize = 1;
 	public Color cellColor = Color.red;
 	public Sprite cellSprite;
 	public Material cellMaterial;
-
-	public float edgeWidth = 0.05f;
-	public Color edgeColor = Color.black;
-	public Material edgeMaterial;
+	[Header("Room")]
+	public Color roomVertexColor = Color.black;
+	public Color roomEdgeColor = Color.white;
+	public Color roomCellColor = Color.blue;
 
 	void Start()
 	{
@@ -27,20 +32,22 @@ public class GridRenderer : MonoBehaviour {
 		this.DrawVertices ();
 		this.DrawCells ();
 		this.DrawEdges ();
+		this.DrawRooms ();
 	}
 
 	private void DrawVertices()
 	{
 		GameObject vertexGroup = new GameObject ("Vertices");
 		vertexGroup.transform.parent = this.gameObject.transform;
-		foreach (MapSystem.Vertex vertex in grid.vertexList)
+		foreach (MapSystem.Vertex vertex in grid.vertices)
 		{
-			MapSystem.Renderer.Vertex vertexRenderer = new MapSystem.Renderer.Vertex (vertex);
+			MapSystem.Renderer.Vertex vertexRenderer = new MapSystem.Renderer.Vertex (vertex, this.gridScale);
 			vertexRenderer.material = this.vertexMaterial;
 			vertexRenderer.color = this.vertexColor;
 			vertexRenderer.size = this.vertexSize;
 			vertexRenderer.sprite = this.vertexSprite;
 			vertexRenderer.gameObject.transform.parent = vertexGroup.transform;
+
 		}
 	}
 
@@ -48,13 +55,13 @@ public class GridRenderer : MonoBehaviour {
 	{
 		GameObject cellGroup = new GameObject ("Cells");
 		cellGroup.transform.parent = this.gameObject.transform;
-		foreach (MapSystem.Cell cell in grid.cellList)
+		foreach (MapSystem.Cell cell in grid.cells)
 		{
-			MapSystem.Renderer.Cell cellRenderer = new MapSystem.Renderer.Cell (cell);
+			MapSystem.Renderer.Cell cellRenderer = new MapSystem.Renderer.Cell (cell, this.gridScale);
 			cellRenderer.material = this.cellMaterial;
 			cellRenderer.color = this.cellColor;
 			cellRenderer.size = this.cellSize;
-			cellRenderer.setSprite(this.cellSprite, 1/this.gridScale);
+			cellRenderer.sprite = this.cellSprite;
 			cellRenderer.gameObject.transform.parent = cellGroup.transform;
 		}
 	}
@@ -67,23 +74,46 @@ public class GridRenderer : MonoBehaviour {
 		edgeHorizontalGroup.transform.parent = edgeGroup.transform;
 		GameObject edgeVerticalGroup = new GameObject ("Vertical");
 		edgeVerticalGroup.transform.parent = edgeGroup.transform;
-		foreach (MapSystem.Edge edge in grid.edgeList["horizontal"])
+
+		foreach (MapSystem.Edge edge in grid.edges["horizontal"])
 		{
-			MapSystem.Renderer.Edge edgeRenderer = new MapSystem.Renderer.Edge (edge);
+			MapSystem.Renderer.Edge edgeRenderer = new MapSystem.Renderer.Edge (edge, this.gridScale);
 			edgeRenderer.gameObject.transform.parent = edgeHorizontalGroup.transform;
 			edgeRenderer.width = this.edgeWidth;
 			edgeRenderer.color = this.edgeColor;
 			edgeRenderer.material = this.edgeMaterial;
 		}
 
-		foreach (MapSystem.Edge edge in grid.edgeList["vertical"])
+		foreach (MapSystem.Edge edge in grid.edges["vertical"])
 		{
-			MapSystem.Renderer.Edge edgeRenderer = new MapSystem.Renderer.Edge (edge);
+			MapSystem.Renderer.Edge edgeRenderer = new MapSystem.Renderer.Edge (edge, this.gridScale);
 			edgeRenderer.gameObject.transform.parent = edgeVerticalGroup.transform;
 			edgeRenderer.width = this.edgeWidth;
 			edgeRenderer.color = this.edgeColor;
 			edgeRenderer.material = this.edgeMaterial;
+
 		}
 	}
 
+	public void DrawRooms()
+	{
+		foreach (MapSystem.Room room in this.grid.roomList)
+		{
+			foreach(MapSystem.Cell cell in room.cells)
+			{
+				cell.renderer.color = this.roomCellColor;
+				foreach (MapSystem.Vertex vertex in cell.vertices) 
+				{
+					vertex.renderer.color = this.roomVertexColor;
+				}
+				foreach(MapSystem.Edge edge in cell.edges.Values)
+				{
+					edge.renderer.color = this.roomEdgeColor;
+				}
+
+			}
+
+		}
+
+	}
 }

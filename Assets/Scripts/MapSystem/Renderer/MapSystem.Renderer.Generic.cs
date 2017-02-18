@@ -6,7 +6,19 @@ namespace MapSystem.Renderer
 {
 	public abstract class Generic
 	{
-		public GameObject gameObject;
+		public GameObject _gameOject;
+		public GameObject gameObject
+		{
+			get
+			{
+				return _gameOject;
+			}
+			set
+			{
+				_gameOject = value;
+				_gameOject.isStatic = true;
+			}
+		}
 
 		public SpriteRenderer renderer
 		{
@@ -15,6 +27,8 @@ namespace MapSystem.Renderer
 				return this.gameObject.GetComponent<SpriteRenderer> ();;
 			}
 		}
+
+		public float scale = 1;
 
 		private float _size;
 		public float size
@@ -25,8 +39,8 @@ namespace MapSystem.Renderer
 			}
 			set
 			{
-				_size = value;
-				this.gameObject.transform.localScale = new Vector3 (value, value, value);
+				_size = value * scale;
+				this.gameObject.transform.localScale = new Vector3 (_size, _size, _size);
 			}
 		}
 

@@ -9,9 +9,10 @@ namespace MapSystem
 	{
 		public float scale;
 		public Vector2 size;
-		public Vertex[,] vertexList;
-		public Cell[,] cellList;
-		public Dictionary<string, Edge[,]> edgeList;
+		public Vertex[,] vertices;
+		public Cell[,] cells;
+		public Dictionary<string, Edge[,]> edges;
+		public List<Room> roomList;
 
 		public Grid(Vector2 size, float scale)
 		{
@@ -20,9 +21,20 @@ namespace MapSystem
 			Vertices vertices = new Vertices(size, scale);
 			Edges edges = new Edges(vertices);
 			Cells cells = new Cells(edges);
-			this.vertexList = vertices.vertexList;
-			this.cellList = cells.cellList;
-			this.edgeList = edges.edgeList;
+			this.vertices = vertices.list;
+			this.cells = cells.list;
+			this.edges = edges.list;
+			this.roomList = new List<Room> ();
+
+			#region TEMPORARIO
+			try{
+				this.roomList.Add (new Room (this.cells [0, 0]));
+				this.roomList.Add (new Room (this.cells [1, 0]));
+				this.roomList.Add (new Room (this.cells [0, 1]));
+				this.roomList.Add (new Room (this.cells [1, 1]));
+			}catch(System.Exception){}
+			#endregion
+
 		}
 	}
 }
