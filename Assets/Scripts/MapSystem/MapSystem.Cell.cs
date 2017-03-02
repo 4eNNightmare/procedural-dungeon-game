@@ -6,10 +6,25 @@ namespace MapSystem{
 
 	public class Cell
 	{
+		public Dictionary<string, Cell> adjacent = new Dictionary<string, Cell>{{"top", null}, {"left", null}, {"bottom", null}, {"right", null}};
 		public Renderer.Cell renderer;
 		public Room room;
+        public Grid grid;
+        public Vector2 gridPosition;
 		public Dictionary<string, Edge> edges;
 		public Vertex[,] vertices;
+		public Vector2[,] vertexPosition
+		{
+			get
+            {
+                Vector2[,] positions = new Vector2[2, 2]
+                { 
+                    { vertices[0, 0].position, vertices[1, 0].position},
+                    { vertices[0, 1].position, vertices[1, 1].position}
+                };
+                return positions;
+            }
+		}
 		public float width
 		{
 			get{ return this.edges["right"].start.position.x - this.edges["left"].end.position.x; }

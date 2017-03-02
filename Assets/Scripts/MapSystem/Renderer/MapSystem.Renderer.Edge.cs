@@ -68,6 +68,7 @@ namespace MapSystem.Renderer{
 			this.edge.renderer = this;
 			this.scale = scale;
 			this.gameObject = new GameObject(string.Format("Edge {0}", edge.start.position), typeof(LineRenderer));
+			this.gameObject.layer = LayerMask.NameToLayer ("Map");
 			this.renderer.SetPosition (0, edge.start.position);
 			this.renderer.SetPosition (1, edge.end.position);
 			this.renderer.receiveShadows = false;

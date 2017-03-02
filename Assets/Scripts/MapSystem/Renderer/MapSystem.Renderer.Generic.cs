@@ -17,6 +17,7 @@ namespace MapSystem.Renderer
 			{
 				_gameOject = value;
 				_gameOject.isStatic = true;
+				_gameOject.layer = LayerMask.NameToLayer ("Map");
 			}
 		}
 

@@ -99,10 +99,11 @@ public class MapRenderer : MonoBehaviour {
 	{
 		foreach (MapSystem.Room room in this.grid.roomList)
 		{
-			foreach(MapSystem.Cell cell in room.cells)
+            Color rColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+            foreach (MapSystem.Cell cell in room.cells)
 			{
-				cell.renderer.color = this.roomCellColor;
-				foreach (MapSystem.Vertex vertex in cell.vertices) 
+				cell.renderer.color = rColor;//this.roomCellColor;
+                foreach (MapSystem.Vertex vertex in cell.vertices) 
 				{
 					vertex.renderer.color = this.roomVertexColor;
 				}
@@ -110,9 +111,8 @@ public class MapRenderer : MonoBehaviour {
 				{
 					edge.renderer.color = this.roomEdgeColor;
 				}
-
 			}
-
+            new MapSystem.Procedural.Room(room).Fill(2);
 		}
 
 	}

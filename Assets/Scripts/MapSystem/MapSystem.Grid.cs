@@ -25,13 +25,21 @@ namespace MapSystem
 			this.cells = cells.list;
 			this.edges = edges.list;
 			this.roomList = new List<Room> ();
-
+			for (int y = 0; y < this.cells.GetLength(1); y++) 
+			{
+				for (int x = 0; x < this.cells.GetLength(0); x++) 
+				{
+                    this.cells[x, y].grid = this;
+                    this.cells[x, y].gridPosition = new Vector2(x, y);
+					try {this.cells [x, y].adjacent ["top"]    = this.cells [x, y + 1];} catch (System.IndexOutOfRangeException) {}
+					try {this.cells [x, y].adjacent ["left"]   = this.cells [x - 1, y];} catch (System.IndexOutOfRangeException) {}
+					try {this.cells [x, y].adjacent ["bottom"] = this.cells [x, y - 1];} catch (System.IndexOutOfRangeException) {}
+					try {this.cells [x, y].adjacent ["right"]  = this.cells [x + 1, y];} catch (System.IndexOutOfRangeException) {}
+				}
+			}
 			#region TEMPORARIO
 			try{
-				this.roomList.Add (new Room (this.cells [0, 0]));
-				this.roomList.Add (new Room (this.cells [1, 0]));
-				this.roomList.Add (new Room (this.cells [0, 1]));
-				this.roomList.Add (new Room (this.cells [1, 1]));
+				this.roomList.Add (new Room (this.cells [1, 1], new Vector2(2,2)));
 			}catch(System.Exception){}
 			#endregion
 
