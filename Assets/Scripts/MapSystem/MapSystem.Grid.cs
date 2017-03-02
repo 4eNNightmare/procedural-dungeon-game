@@ -37,12 +37,6 @@ namespace MapSystem
 					try {this.cells [x, y].adjacent ["right"]  = this.cells [x + 1, y];} catch (System.IndexOutOfRangeException) {}
 				}
 			}
-			#region TEMPORARIO
-			try{
-				this.roomList.Add (new Room (this.cells [1, 1], new Vector2(2,2)));
-			}catch(System.Exception){}
-			#endregion
-
 		}
 	}
 }

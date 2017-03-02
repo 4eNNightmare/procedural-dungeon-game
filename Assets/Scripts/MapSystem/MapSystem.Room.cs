@@ -19,6 +19,7 @@ namespace MapSystem
                     this.cells[x, y] = origin.grid.cells[(int)origin.gridPosition.x + x, (int)origin.gridPosition.y + y];
                 }
             }
+
 		}
 	}
 }

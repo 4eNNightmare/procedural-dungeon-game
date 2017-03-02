@@ -97,7 +97,9 @@ public class MapRenderer : MonoBehaviour {
 
 	public void DrawRooms()
 	{
-		foreach (MapSystem.Room room in this.grid.roomList)
+        this.grid.roomList.Add(new MapSystem.Room(this.grid.cells[1, 1], new Vector2(2, 2)));
+        this.grid.roomList.Add(new MapSystem.Room(this.grid.cells[0, 0], new Vector2(1, 2)));
+        foreach (MapSystem.Room room in this.grid.roomList)
 		{
             Color rColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
             foreach (MapSystem.Cell cell in room.cells)
@@ -112,8 +114,19 @@ public class MapRenderer : MonoBehaviour {
 					edge.renderer.color = this.roomEdgeColor;
 				}
 			}
-            new MapSystem.Procedural.Room(room).Fill(2);
-		}
+            MapSystem.Procedural.Room floor = new MapSystem.Procedural.Room(room);
+            floor.Fill(15);
+            floor.cornersQuad["topLeft"].gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            floor.cornersQuad["bottomLeft"].gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            floor.cornersQuad["topRight"].gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            floor.cornersQuad["bottomRight"].gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            floor.edgesQuadCenter["top"].gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
+            floor.edgesQuadCenter["right"].gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
+            floor.edgesQuadCenter["left"].gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
+            floor.edgesQuadCenter["bottom"].gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
 
-	}
+
+        }
+
+    }
 }
